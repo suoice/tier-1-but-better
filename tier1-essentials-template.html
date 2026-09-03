@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tier 1 — The Essentials | Wedding Website Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Lato:ital,wght@0,300;0,400;1,300&family=Great+Vibes&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #FDFCF6;
+  --bg-alt:   #F4F1E8;
+  --bg-dark:  #2B3815;
+  --text:     #1a1a1a;
+  --text-mid: #555;
+  --text-soft:#888;
+  --gold:     #E6AF2E;
+  --gold-glow:rgba(230,175,46,0.35);
+  --sage:     #7A8F6A;
+  --serif:    'Cinzel', serif;
+  --script:   'Great Vibes', cursive;
+  --sign:     'Dancing Script', cursive;
+  --body:     'Lato', sans-serif;
+  --ease: cubic-bezier(.16,1,.3,1);
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; cursor: none; }
+body { background: var(--bg); color: var(--text); font-family: var(--body); overflow-x: hidden; }
+
+.grain {
+  position: fixed; inset: 0; pointer-events: none; z-index: 9998; opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.cur-dot, .cur-glow { position: fixed; top:0; left:0; transform: translate(-50%,-50%); border-radius: 50%; z-index: 10000; pointer-events: none; }
+.cur-dot  { width:7px; height:7px; background: var(--text); transition: transform .15s; }
+.cur-glow { width:38px; height:38px; background: var(--gold-glow); filter:blur(10px); transition: left .06s, top .06s; }
+
+/* ── SCROLL PROGRESS RAIL ── */
+.progress-rail { position: fixed; top:0; right: 18px; width:2px; height:100vh; z-index:9999; background:rgba(0,0,0,.06); }
+.progress-fill { width:100%; height:0%; background: var(--gold); transition: height .05s linear; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top:0; width:100%; padding:1.6rem 3rem;
+  display:flex; justify-content:space-between; align-items:center;
+  z-index:200; mix-blend-mode: difference; color:#fff;
+}
+.nav-logo { font-family:var(--serif); font-size:1.3rem; letter-spacing:3px; text-decoration:none; color:inherit; }
+.nav-links { display:flex; gap:2.2rem; list-style:none; }
+.nav-links a { text-decoration:none; color:inherit; font-size:.72rem; text-transform:uppercase; letter-spacing:2.5px; position: relative; }
+.nav-links a::after { content:''; position:absolute; left:0; bottom:-3px; width:0; height:1px; background:#fff; transition: width .3s; }
+.nav-links a:hover::after, .nav-links a.active::after { width:100%; }
+
+.eyebrow { font-family:var(--serif); font-size:.68rem; text-transform:uppercase; letter-spacing:4px; color:var(--gold); display:block; margin-bottom:1rem; }
+.eyebrow.on-light { color:var(--sage); }
+
+.heading-lc {
+  font-family: var(--serif); font-weight:500; text-transform: lowercase;
+  font-size: clamp(2.1rem, 4.2vw, 3.4rem); letter-spacing: .01em; line-height:1.15; color: var(--text);
+}
+.heading-lc.on-dark { color:#FDFCF6; }
+
+/* ── reveal variants — alternating directions for a less "flat" scroll ── */
+.reveal        { opacity:0; transform:translateY(46px);              transition: opacity 1s var(--ease), transform 1s var(--ease); }
+.reveal-l      { opacity:0; transform:translateX(-70px) rotate(-1deg); transition: opacity 1.05s var(--ease), transform 1.05s var(--ease); }
+.reveal-r      { opacity:0; transform:translateX(70px) rotate(1deg);   transition: opacity 1.05s var(--ease), transform 1.05s var(--ease); }
+.reveal-scale  { opacity:0; transform:scale(.88);                     transition: opacity .95s var(--ease), transform .95s var(--ease); }
+.reveal.in, .reveal-l.in, .reveal-r.in, .reveal-scale.in { opacity:1; transform:none; }
+.d1{transition-delay:.08s} .d2{transition-delay:.16s} .d3{transition-delay:.24s} .d4{transition-delay:.32s} .d5{transition-delay:.4s} .d6{transition-delay:.48s}
+
+.btn { display:inline-block; background:transparent; border:1px solid currentColor; padding:.9rem 2.4rem; font-family:var(--body); font-size:.8rem; text-transform:uppercase; letter-spacing:2px; cursor:pointer; transition: background .25s, color .25s; text-decoration:none; color: var(--text); }
+.btn:hover { background: var(--text); color: var(--bg); }
+.btn-gold { border-color: var(--gold); color: var(--gold); }
+.btn-gold:hover { background: var(--gold); color: #fff; }
+
+/* ── WAVE DIVIDERS — soft single-curve transitions between section colors,
+   this is the "fluid" connective tissue between blocks ── */
+.wave { position:relative; display:block; width:100%; height:90px; margin-top:-1px; }
+.wave svg { display:block; width:100%; height:100%; }
+.wave.to-alt   { color: var(--bg-alt); }
+.wave.to-dark  { color: var(--bg-dark); }
+.wave.to-light { color: var(--bg); }
+
+/* ── PHOTO FRAME ── */
+.ph-img { width:100%; height:100%; position:relative; overflow:hidden; background: linear-gradient(135deg, var(--bg-alt), #ece6d4); }
+.ph-img img { width:100%; height:100%; object-fit:cover; display:block; filter: sepia(8%) saturate(.92); transition: transform .8s var(--ease), filter .4s ease; }
+.ph-img:hover img { transform: scale(1.05); filter: sepia(0%) saturate(1); }
+.ph-img .ph-lbl { position:absolute; bottom:.6rem; left:.7rem; font-family: var(--serif); font-size:.55rem; letter-spacing:1.5px; text-transform:uppercase; color:#fff; background:rgba(0,0,0,.35); padding:.25rem .6rem; border-radius:20px; opacity:.85; pointer-events:none; }
+
+/* ══ HERO — layered, parallax-driven, curtain-reveal type ══ */
+.hero {
+  min-height: 112vh; position: relative; overflow: hidden;
+  display: grid; grid-template-columns: 1fr 1.15fr; align-items: center; gap: 2rem;
+  padding: 9rem 6% 6rem;
+}
+.hero-blob {
+  position:absolute; top:-10%; right:-10%; width:60%; height:70%;
+  background: radial-gradient(circle at 40% 40%, var(--gold-glow), transparent 65%),
+              radial-gradient(circle at 65% 60%, rgba(122,143,106,.28), transparent 60%);
+  filter: blur(30px); pointer-events:none; z-index:0;
+}
+.hero-text { position:relative; z-index:3; will-change: transform, opacity; }
+.wedding-of { font-family: var(--script); font-size: clamp(2rem, 3.6vw, 3.2rem); line-height: 1; margin-bottom: .3rem; display:block; color: var(--text-mid); opacity:0; animation: fadeUp .9s var(--ease) .15s forwards; }
+
+h1.names { font-family: var(--serif); font-weight:500; text-transform:lowercase; font-size: clamp(2.8rem, 6.4vw, 5.6rem); line-height: .98; letter-spacing: .01em; color: var(--text); display:flex; flex-wrap:wrap; gap: 0 .32em; }
+h1.names .word-mask { overflow:hidden; display:inline-block; }
+h1.names .word-mask span { display:inline-block; transform: translateY(115%); animation: curtainUp .9s var(--ease) forwards; }
+h1.names .w1 span { animation-delay: .28s; }
+h1.names .amp-mask span { animation-delay: .42s; color: var(--gold); font-style:italic; }
+h1.names .w2 span { animation-delay: .56s; }
+
+.hero-date { margin-top: 2rem; padding-left: 1.2rem; border-left: 2px solid var(--gold); line-height:1.7; opacity:0; animation: fadeUp .9s var(--ease) .8s forwards; }
+.hero-date .dotted { font-family:var(--serif); font-size:1.5rem; letter-spacing:2px; color:var(--text); display:block; }
+.hero-date .venue { font-size:.8rem; text-transform:uppercase; letter-spacing:3px; color:var(--text-mid); }
+
+@keyframes fadeUp { from{opacity:0; transform:translateY(22px);} to{opacity:1; transform:translateY(0);} }
+@keyframes curtainUp { from{transform:translateY(115%);} to{transform:translateY(0);} }
+
+.hero-collage { position:relative; height: 82vh; min-height: 500px; z-index:2; }
+.hc-frame { position:absolute; overflow:hidden; box-shadow: 0 18px 44px rgba(0,0,0,.16); border: 6px solid var(--bg); will-change: transform; transition: box-shadow .4s; }
+.hc-frame:hover { box-shadow: 0 24px 56px rgba(0,0,0,.22); }
+.hc-1 { width:54%; height:60%; top:2%; right:0; --base-rot:2deg; z-index:2; }
+.hc-2 { width:40%; height:38%; bottom:8%; left:0; --base-rot:-4deg; z-index:3; }
+.hc-3 { width:28%; height:24%; top:40%; left:22%; --base-rot:5deg; z-index:4; }
+.hc-4 { width:40%; height:36%; top:6%; left:2%; --base-rot:-3deg; z-index:1; opacity:.9; }
+.hc-frame .ph-img { aspect-ratio: auto; height:100%; }
+
+.sun-seal { position: absolute; bottom: -4%; left: 2%; width: 118px; height: 118px; z-index: 5; pointer-events:none; animation: bob 5s ease-in-out infinite; }
+.sun-seal svg { animation: spin 22s linear infinite; }
+.seal-center { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+.seal-monogram { font-family: var(--serif); font-size:1rem; letter-spacing:2px; background: var(--bg); width: 76px; height: 76px; border-radius: 50%; border: 2px solid var(--gold); color: var(--gold); display: flex; align-items: center; justify-content: center; }
+@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+@keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+
+.scroll-cue { position:absolute; bottom: 2.2rem; left: 50%; transform:translateX(-50%); z-index:4; display:flex; flex-direction:column; align-items:center; gap:.6rem; opacity:0; animation: fadeUp 1s var(--ease) 1.3s forwards; }
+.scroll-cue .sc-line { width:1px; height:42px; background: linear-gradient(var(--gold), transparent); animation: scDrop 1.8s ease-in-out infinite; }
+.scroll-cue span { font-family:var(--serif); font-size:.6rem; letter-spacing:3px; text-transform:uppercase; color:var(--text-soft); }
+@keyframes scDrop { 0%{transform:scaleY(0); transform-origin:top;} 50%{transform:scaleY(1); transform-origin:top;} 51%{transform-origin:bottom;} 100%{transform:scaleY(0); transform-origin:bottom;} }
+
+/* ══ WELCOME ══ */
+.message-sec { background: var(--bg-alt); padding: 3rem 6% 6rem; text-align:center; position:relative; }
+.message-inner { max-width: 620px; margin: 0 auto; }
+.message-inner .vignette { font-family: var(--serif); font-style:italic; font-weight:400; font-size: clamp(1.3rem, 2.4vw, 1.7rem); line-height:1.65; color: var(--text); margin-bottom: 2rem; }
+.message-inner p.sub-copy { font-size: 1rem; line-height:1.9; color: var(--text-mid); margin-bottom:1rem; }
+.couple-sign { font-family: var(--sign); font-size: 1.7rem; font-weight:700; color: var(--text); margin-top:1rem; }
+
+/* ── MARQUEE — continuous motion strip, the connective "fluid" element ── */
+.marquee-strip { background: var(--bg-alt); border-top:1px solid #e3dcc4; border-bottom:1px solid #e3dcc4; overflow:hidden; padding: 1.1rem 0; }
+.marquee-track { display:flex; width:max-content; animation: marquee 26s linear infinite; }
+.marquee-track span { font-family:var(--serif); font-size:.85rem; letter-spacing:4px; text-transform:uppercase; color:var(--text-mid); padding: 0 2.4rem; white-space:nowrap; display:flex; align-items:center; gap:2.4rem; }
+.marquee-track span::after { content:'✦'; color:var(--gold); font-size:.7rem; }
+@keyframes marquee { from{transform:translateX(0);} to{transform:translateX(-50%);} }
+
+/* ══ THE PROGRAM ══ */
+.program-sec { background: var(--bg-dark); color:#FDFCF6; padding: 6rem 6% 6.5rem; position:relative; }
+.program-head { text-align:center; margin-bottom: 4rem; }
+.program-list { max-width: 640px; margin: 0 auto; }
+.program-row { display:grid; grid-template-columns: 110px 1fr; gap: 2rem; padding: 2.1rem 0; border-top: 1px solid rgba(255,255,255,.12); }
+.program-row:last-child { border-bottom: 1px solid rgba(255,255,255,.12); }
+.program-time { font-family:var(--serif); font-size:.85rem; letter-spacing:1.5px; color:var(--gold); padding-top:.15rem; }
+.program-title { font-family:var(--serif); font-weight:500; text-transform:lowercase; font-size:1.25rem; margin-bottom:.5rem; }
+.program-desc { font-size:.92rem; line-height:1.7; color:rgba(255,255,255,.7); }
+
+/* ══ GALLERY — staggered scale-in mosaic, subtle continuous drift ══ */
+.gallery-sec { padding: 6.5rem 6% 7rem; }
+.gallery-head { text-align:center; margin-bottom: 3.5rem; }
+.mosaic { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(6, 1fr); grid-auto-rows: 90px; gap: 1rem; }
+.mosaic .m-item { overflow:hidden; will-change: transform; }
+.mosaic .m-item:nth-child(1) { grid-column: span 3; grid-row: span 3; }
+.mosaic .m-item:nth-child(2) { grid-column: span 3; grid-row: span 2; }
+.mosaic .m-item:nth-child(3) { grid-column: span 2; grid-row: span 2; }
+.mosaic .m-item:nth-child(4) { grid-column: span 4; grid-row: span 3; }
+.mosaic .m-item:nth-child(5) { grid-column: span 3; grid-row: span 2; }
+.mosaic .m-item:nth-child(6) { grid-column: span 3; grid-row: span 2; }
+
+/* ══ RSVP ══ */
+.rsvp-sec { background: var(--bg-alt); }
+.rsvp-grid { display:grid; grid-template-columns: 1fr 1fr; min-height: 68vh; }
+.rsvp-photo { position:relative; overflow:hidden; }
+.rsvp-photo .ph-img { height:100%; }
+.rsvp-photo .ph-img img { animation: kenburns 16s ease-in-out infinite alternate; }
+@keyframes kenburns { from{transform:scale(1);} to{transform:scale(1.09) translate(-1%,-1%);} }
+.rsvp-form-wrap { display:flex; align-items:center; justify-content:center; padding: 5rem 8%; }
+.rsvp-inner { max-width:420px; width:100%; }
+.rsvp-inner .heading-lc { margin-bottom:.5rem; }
+.rsvp-inner .sub { color:var(--text-soft); margin-bottom:2.6rem; font-size:.85rem; letter-spacing:1px; }
+.form-field { width:100%; background:transparent; border:none; border-bottom:1px solid var(--text); padding:14px 0; font-family:var(--body); font-size:1.02rem; margin-bottom:1.7rem; border-radius:0; color:var(--text); transition: border-color .3s; }
+.form-field:focus { outline:none; border-bottom:2px solid var(--gold); }
+.form-field option { color: var(--text); background: var(--bg); }
+.form-feedback { display:none; margin-top:1rem; font-family:var(--serif); font-size:.88rem; }
+
+/* ══ FOOTER ══ */
+footer { background: var(--bg-dark); color: #FDFCF6; text-align:center; padding:3.2rem 2rem; font-family: var(--serif); letter-spacing:1px; }
+footer .foot-script { font-family: var(--sign); font-size:2rem; color:var(--gold); margin-top:.5rem; }
+footer .foot-date { text-transform:lowercase; letter-spacing:2px; }
+
+.tier-badge { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 500; background: var(--bg-dark); color: var(--gold); font-family: var(--serif); font-size:.6rem; letter-spacing:2px; text-transform:uppercase; padding: .65rem 1.1rem; border: 1px solid var(--gold); border-radius: 30px; box-shadow: 0 6px 20px rgba(0,0,0,.15); }
+
+@media (max-width:900px) {
+  .hero { grid-template-columns: 1fr; min-height: 128vh; padding-top:7rem; }
+  .hero-collage { height: 52vh; margin-top: 2.5rem; order:2; }
+  .rsvp-grid { grid-template-columns: 1fr; }
+  .rsvp-photo { height: 40vh; }
+}
+@media (max-width:768px) {
+  .cur-dot, .cur-glow, .progress-rail { display: none !important; }
+  nav { display:flex; align-items:center; padding: 1.4rem 5% 0 5%; gap: 1.2rem; overflow:hidden; }
+  .nav-links { display:flex; flex-wrap:nowrap; overflow-x:auto; gap:1.2rem; padding-bottom:.5rem; flex:1; }
+  .program-row { grid-template-columns: 1fr; gap:.4rem; }
+  .mosaic { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 130px; }
+  .mosaic .m-item { grid-column: span 1 !important; grid-row: span 2 !important; }
+  .tier-badge { bottom: .8rem; right: .8rem; font-size:.52rem; padding:.5rem .9rem; }
+  .wave { height:50px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="cur-dot"></div>
+<div class="cur-glow"></div>
+<div class="progress-rail"><div class="progress-fill" id="progressFill"></div></div>
+<div class="tier-badge">Tier 1 · The Essentials — Demo</div>
+
+<nav>
+  <a href="#home" class="nav-logo">J & M</a>
+  <ul class="nav-links">
+    <li><a href="#home" class="active">Home</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#rsvp">RSVP</a></li>
+  </ul>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="home">
+  <div class="hero-blob"></div>
+  <div class="hero-text" id="heroText">
+    <span class="wedding-of">the wedding of</span>
+    <h1 class="names">
+      <span class="word-mask w1"><span>juan</span></span>
+      <span class="word-mask amp-mask"><span>&amp;</span></span>
+      <span class="word-mask w2"><span>maria</span></span>
+    </h1>
+    <div class="hero-date">
+      <span class="dotted">04.25.2026</span>
+      <span class="venue">Venue Name, City</span>
+    </div>
+  </div>
+
+  <div class="hero-collage" id="heroCollage">
+    <div class="hc-frame hc-4" data-speed="-0.10" data-depth="6"><div class="ph-img"><img src="BLD03128.jpg" alt="Detail photo placeholder" loading="lazy"></div></div>
+    <div class="hc-frame hc-1" data-speed="0.16" data-depth="10"><div class="ph-img"><img src="BLD03323.jpg" alt="Couple photo placeholder" loading="lazy"></div></div>
+    <div class="hc-frame hc-2" data-speed="0.24" data-depth="16"><div class="ph-img"><img src="66368add-9d3e-464a-989f-4189205fac12.jpg" alt="Detail photo placeholder" loading="lazy"><span class="ph-lbl">Demo photo </span></div></div>
+    <div class="hc-frame hc-3" data-speed="0.34" data-depth="22"><div class="ph-img"><img src="3c7a3a22-08bd-461f-a61b-e88e6d36524d.jpg" loading="lazy">></div></div>
+    <div class="sun-seal">
+      <svg viewBox="0 0 100 100" width="118" height="118">
+        <path id="cp" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0" fill="transparent"/>
+        <text font-size="10.5" font-family="Cinzel" letter-spacing="1.8" fill="#1a1a1a">
+          <textPath href="#cp">together forever•Juan &amp;Maria•</textPath>
+        </text>
+      </svg>
+      <div class="seal-center"><span class="seal-monogram">J&amp;M</span></div>
+    </div>
+  </div>
+
+  <div class="scroll-cue"><div class="sc-line"></div><span>scroll</span></div>
+</section>
+
+<div class="wave to-alt"><svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path fill="currentColor" d="M0,40 C 320,110 1120,-30 1440,40 L1440,90 L0,90 Z"/></svg></div>
+
+<!-- ══ WELCOME ══ -->
+<section class="message-sec">
+  <div class="message-inner reveal-scale">
+    <span class="eyebrow on-light">welcome</span>
+    <p class="vignette">"We can't wait to celebrate this beautiful day surrounded by the people we love most."</p>
+    <p class="sub-copy">As we prepare for our big day, we've created this space to keep you updated and help you feel right at home as you join us in celebration.</p>
+    <div class="couple-sign">Juan &amp; Maria</div>
+  </div>
+</section>
+
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span>juan &amp; maria</span><span>04 . 25 . 2026</span><span>kindly join us</span>
+    <span>juan &amp; maria</span><span>04 . 25 . 2026</span><span>kindly join us</span>
+    <span>juan &amp; maria</span><span>04 . 25 . 2026</span><span>kindly join us</span>
+  </div>
+</div>
+
+<div class="wave to-dark"><svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path fill="currentColor" d="M0,50 C 400,-20 1040,120 1440,30 L1440,90 L0,90 Z"/></svg></div>
+
+<!-- ══ THE PROGRAM ══ -->
+<section class="program-sec">
+  <div class="program-head reveal">
+    <span class="eyebrow" style="color:var(--gold)">save the date</span>
+    <h2 class="heading-lc on-dark">04.25.2026</h2>
+  </div>
+  <div class="program-list">
+    <div class="program-row reveal-l">
+      <div class="program-time">2:00 PM</div>
+      <div>
+        <div class="program-title">the ceremony</div>
+        <div class="program-desc">Ceremony Venue Name — City, Province. Join us as we exchange vows before family and friends.</div>
+      </div>
+    </div>
+    <div class="program-row reveal-r">
+      <div class="program-time">5:00 PM</div>
+      <div>
+        <div class="program-title">the reception</div>
+        <div class="program-desc">Reception Venue Name. An evening of dinner, dancing, and celebration together.</div>
+      </div>
+    </div>
+    <div class="program-row reveal-l">
+      <div class="program-time">attire</div>
+      <div>
+        <div class="program-title">semi-formal</div>
+        <div class="program-desc">In shades of your choice — full palette and details shared closer to the date.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wave to-light"><svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path fill="currentColor" d="M0,30 C 380,120 1080,-20 1440,50 L1440,90 L0,90 Z"/></svg></div>
+
+<!-- ══ GALLERY ══ -->
+<section class="gallery-sec" id="gallery">
+  <div class="gallery-head reveal">
+    <span class="eyebrow on-light">captured moments</span>
+    <h2 class="heading-lc">gallery</h2>
+  </div>
+  <div class="mosaic">
+    <div class="m-item reveal-scale d1"><div class="ph-img"><img src="253e6e1d-7f94-4d78-880b-0b524e453534.jpg" alt="Gallery photo placeholder" loading="lazy"></div></div>
+    <div class="m-item reveal-scale d2"><div class="ph-img"><img src="a3fc3a97-1808-4387-b820-caf7cffb175f.jpg" alt="Gallery photo placeholder" loading="lazy"></div></div>
+    <div class="m-item reveal-scale d3"><div class="ph-img"><img src="b2362089-7931-47d3-8bbb-2d72e4247881.jpg" alt="Gallery photo placeholder" loading="lazy"></div></div>
+    <div class="m-item reveal-scale d2"><div class="ph-img"><img src="BLD03381.jpg" alt="Gallery photo placeholder" loading="lazy"></div></div>
+    <div class="m-item reveal-scale d4"><div class="ph-img"><img src="BLD03307.jpg" alt="Gallery photo placeholder" loading="lazy"></div></div>
+    <div class="m-item reveal-scale d5"><div class="ph-img"><img src="BLD03323.jpg" alt="Gallery photo placeholder" loading="lazy"></div></div>
+  </div>
+</section>
+
+<div class="wave to-alt"><svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path fill="currentColor" d="M0,45 C 340,-10 1140,110 1440,35 L1440,90 L0,90 Z"/></svg></div>
+
+<!-- ══ RSVP ══ -->
+<section class="rsvp-sec" id="rsvp">
+  <div class="rsvp-grid">
+    <div class="rsvp-photo reveal-l"><div class="ph-img"><img src="BLD03255.jpg" alt="RSVP photo placeholder" loading="lazy"><span class="ph-lbl">Demo photo — replace</span></div></div>
+    <div class="rsvp-form-wrap">
+      <div class="rsvp-inner reveal-r">
+        <span class="eyebrow on-light">kindly respond</span>
+        <h2 class="heading-lc">will you join us?</h2>
+        <p class="sub">Please respond before Month Day, Year</p>
+        <form id="rsvpForm" onsubmit="return false;">
+          <input class="form-field" type="text" placeholder="Your Full Name" required>
+          <input class="form-field" type="email" placeholder="Email Address" required>
+          <select class="form-field" required>
+            <option value="" disabled selected>Your Attendance</option>
+            <option value="Accepts">Joyfully Accepts</option>
+            <option value="Declines">Regretfully Declines</option>
+          </select>
+          <button type="submit" class="btn btn-gold" style="width:100%; margin-top:.5rem; font-size:.85rem;">Confirm Attendance</button>
+          <div class="form-feedback" id="formFeedback"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>With love and gratitude,</p>
+  <p class="foot-script">Juan &amp; Maria</p>
+  <p class="foot-date" style="margin-top:1.5rem; font-size:.75rem; color:#888;">04.25.2026 · Venue, City</p>
+</footer>
+
+<script>
+  // ── Cursor glow ──
+  const dot  = document.querySelector('.cur-dot');
+  const glow = document.querySelector('.cur-glow');
+  document.addEventListener('mousemove', e => {
+    dot.style.left = e.clientX+'px'; dot.style.top = e.clientY+'px';
+    setTimeout(()=>{ glow.style.left = e.clientX+'px'; glow.style.top = e.clientY+'px'; }, 55);
+  });
+
+  // ── Intersection reveal (fade / left / right / scale variants) ──
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal, .reveal-l, .reveal-r, .reveal-scale').forEach(el => obs.observe(el));
+
+  // ── Scroll-driven: progress rail, hero parallax fade, collage parallax ──
+  const heroEl      = document.getElementById('home');
+  const heroText     = document.getElementById('heroText');
+  const collageFrames = document.querySelectorAll('.hc-frame');
+  const progressFill  = document.getElementById('progressFill');
+  let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0;
+
+  document.getElementById('heroCollage').addEventListener('mousemove', e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    targetX = ((e.clientX - r.left) / r.width - 0.5) * 2;   // -1..1
+    targetY = ((e.clientY - r.top) / r.height - 0.5) * 2;
+  });
+
+  function loop() {
+    const scrollY = window.scrollY;
+    const heroH = heroEl.offsetHeight;
+    const progress = Math.min(scrollY / (heroH * 0.9), 1);
+
+    // hero text fades + drifts as you scroll past it
+    heroText.style.opacity = String(Math.max(1 - progress * 1.4, 0));
+    heroText.style.transform = `translateY(${progress * 50}px)`;
+
+    // smooth-follow mouse parallax
+    mouseX += (targetX - mouseX) * 0.06;
+    mouseY += (targetY - mouseY) * 0.06;
+
+    collageFrames.forEach(f => {
+      const speed = parseFloat(f.dataset.speed || 0);
+      const depth = parseFloat(f.dataset.depth || 0);
+      const rot = getComputedStyle(f).getPropertyValue('--base-rot') || '0deg';
+      const ty = scrollY * speed;
+      const mx = mouseX * depth;
+      const my = mouseY * depth * 0.6;
+      f.style.transform = `translate3d(${mx}px, ${ty + my}px, 0) rotate(${rot})`;
+    });
+
+    // scroll progress rail
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    progressFill.style.height = (docH > 0 ? (scrollY / docH) * 100 : 0) + '%';
+
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  // ── Graceful fallback if a demo photo fails to load ──
+  document.querySelectorAll('.ph-img img').forEach(img => {
+    img.addEventListener('error', () => {
+      img.style.display = 'none';
+      img.parentElement.style.display = 'flex';
+      img.parentElement.style.alignItems = 'center';
+      img.parentElement.style.justifyContent = 'center';
+      const mark = document.createElement('span');
+      mark.textContent = '✦';
+      mark.style.fontFamily = 'var(--serif)';
+      mark.style.fontSize = '1.4rem';
+      mark.style.color = 'var(--gold)';
+      img.parentElement.prepend(mark);
+    }, { once:true });
+  });
+
+  document.getElementById('rsvpForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const fb = document.getElementById('formFeedback');
+    fb.style.display = 'block';
+    fb.style.color = 'var(--sage)';
+    fb.textContent = '💛 Demo form — in the live site, this connects to your RSVP tracker.';
+  });
+</script>
+
+</body>
+</html>
